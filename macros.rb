@@ -22,7 +22,8 @@ class CommandParser
   @@macro_method_mappings = {
     # key: the macro trigger phrase
     # val: a CommandParser instance method
-    "hello world" => "hello_world"
+    "hello world" => "hello_world",
+    "text input" => "test_text_input"
   }
   def self.add_key(key)
     system "clear"
@@ -40,6 +41,9 @@ class CommandParser
   end
   def hello_world
     `chromium-browser http://artoo.io`
+  end
+  def test_text_input
+    'hello world'.chars.each { |char| `xdotool key #{char.eql?(' ') ? 'space' : char}` }
   end
 end
 
