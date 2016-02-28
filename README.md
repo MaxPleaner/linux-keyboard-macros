@@ -31,6 +31,7 @@
   - ** How to program a macro to enter text for me? **
   - Use the `xdotool` in a event method like:
     - ``'hello world'.chars.each { |char| `xdotool key #{char.eql?(' ') ? 'space' : char}` }``
+    - Note the " " character has to be replaced with "space"
     - Note that if there is also a 'hello world' macro phrase, if triggered keystrokes write that phrase it will be called as well.
   - This triggers keyboard presses for each desired character.
   - Note that this doesn't automatically delete the trigger phrase, but the BackSpace key can be triggered in the event. 
