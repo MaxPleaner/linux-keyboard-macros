@@ -4,6 +4,9 @@ Keyboard Macros
 - The events are parsed using Regex and keypresses are tracked.
 - Events can be programmed to fire when certain phrases are entered.
 
+- This program evolved from my [artoo-keyboard-macros](https://github.com/maxpleaner/artoo-keyboard-macros) project.
+- The reason for redoing it was that artoo-keyboard doesnt support global listeners [link to github issue](https://github.com/hybridgroup/artoo-keyboard/issues/6)
+
 - The only macro pre-programmed is "hello world", which when typed will open the [artoo.io](artoo.io) site using
 `chromium-browser`. 
 
@@ -15,6 +18,7 @@ Keyboard Macros
 - How to run: __`ruby macros.rb`__
 - Then type anywhere (not just the terminal window) and notice how the text is captured.
 - [`pty`](http://ruby-doc.org/stdlib-2.2.3/libdoc/pty/rdoc/PTY.html) from Ruby's stdlib is used for the streaming I/O 
+- Try typing hello world somewhere
 
 - **Note**
 - If the strict just hangs with no output, it may be becauase you are not logged in as sudo.
