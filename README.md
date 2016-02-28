@@ -20,7 +20,8 @@
   - To add a macro:
     1. create an instance method in `CommandParser` (this is the event that is fired)
     2. map the event to a phrase by adding an entry to `@@macro_method_mappings` in `CommandParser`
-    3. Note that there is currently only support for 'a' through 'z', space and the '@' sign i.e. no alt-tab
+    3. Note that there is currently only support 0-9, a-z (lowercase), space and the '@' sign
+    
 -  How to run
   - How to run: __`ruby macros.rb`__
   - Then type anywhere (not just the terminal window) and notice how the text is captured.
