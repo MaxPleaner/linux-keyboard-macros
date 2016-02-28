@@ -1,17 +1,32 @@
 # stdlib dependencies
-require 'pty'
+require 'pty' # pseudo-terminal
+
+# ./lib dependencies
+require_relative './lib/run_with_timeout.rb'
 
 # gems
 require 'active_support/all'
+require 'colored'
 
 # Overwrite nil.to_sym to return :nil instead of raising NoMethodError
 # This is useful with Object#try
 class NilClass; def to_sym; :nil; end; end;
 
+# Test sudo access
+puts "testing sudo access with 'sudo pwd'"
+sudo_access = run_with_timeout(command="sudo pwd", timeout=0.5, tick=0.1)
+if sudo_access.blank?
+  puts "Error".red
+  puts "configure the 'sudo' command for the current user to not require a password input"
+  puts "This can be done by simply running 'sudo pwd' because 'sudo' automatically saves passwords for 5 minutes."
+  puts "If your visudo configuration doesn't remember password, this wont work"
+  exit
+end
+
 # this is passed to Macros.shell_thread(cmd) when the script is run (see end of file)
 # evtest produces a streaming log of system events
 # '3' is echoed to the process to select 'keyboard' events
-EventsStreamShellCommand = "(echo '3';) | sudo -S evtest"
+EventsStreamShellCommand = "(echo '3';) | sudo -S evtest" # The -S is necessary here
 
 # Mapping of phrases => events
 # The Macros class sends it keys using CommandParser.add_key(key)
@@ -33,11 +48,17 @@ class CommandParser
       @@current_phrase.include?(macro_name) &&\
       @@current_phrase.end_with?(macro_name) # only match phrase at EOL
     }.values.first
-    puts "matching method: #{matching_method.to_s}" if matching_method
-    puts "current phrase: #{@@current_phrase}"
+    puts "#{"matching method".green}: #{matching_method.to_s}" if matching_method
+    puts "#{"current phrase".yellow}: #{@@current_phrase}"
     CommandParser::ParserInstance.try(matching_method.to_sym)
+    print_available_methods
+  end
+  def self.print_available_methods
+    puts "Available_methods: ".green
+    puts @@macro_method_mappings.keys.map { |key| "  #{key}\n"}.join + "\n"
   end
   def initialize(options={})
+    puts "Initializing CommandParser".white_on_black
   end
   def hello_world
     `chromium-browser http://artoo.io`
@@ -78,6 +99,11 @@ end
 
 # Run this block when the script is executed
 if __FILE__ == $0
-  Macros.shell_thread(EventsStreamShellCommand)
+  begin
+    Macros.shell_thread(EventsStreamShellCommand)
+  rescue StandardError => e
+    puts "error".red
+    puts e, e.message, e.backtrace
+  end
 end
 
