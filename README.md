@@ -23,6 +23,9 @@ Keyboard Macros
 - **Note**
 - If the strict just hangs with no output, it may be becauase you are not logged in as sudo.
 - `sudo` has a default timeout of `5` minutes, so if you are just testing this out you can run a command like `sudo pwd`
-and then run `macros.rb` in the next 5 minutes. For a longer term solution, increase the timeout of `sudo` by running
+and then run `macros.rb` in the next 5 minutes. The  timeout of `sudo` can be increased by running
 `sudo visudo` and changing the value of `Defaults:user_name timestamp_timeout`.
 true 
+- I know there is a way to pipe password to sudo, something like
+`(echo 'my_password'; echo '3';) | ruby macros.rb` but it wasn't working.
+Everything except the sudo part worked.  
