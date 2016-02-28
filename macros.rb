@@ -53,7 +53,7 @@ class Macros
                                .split(")")[0]
                                .downcase
     parsed_key_info = " " if parsed_key_info == "space"
-    return unless parsed_key_info.in?(['a'.upto('z').to_a, " "].flatten)
+    return unless parsed_key_info.in?(['a'.upto('z').to_a, " ", "@"].flatten)
     CommandParser.add_key(parsed_key_info)
   end
   def self.shell_thread(cmd)

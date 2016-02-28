@@ -20,12 +20,15 @@ Keyboard Macros
 - [`pty`](http://ruby-doc.org/stdlib-2.2.3/libdoc/pty/rdoc/PTY.html) from Ruby's stdlib is used for the streaming I/O 
 - Try typing hello world somewhere
 
-- **Note**
-- If the strict just hangs with no output, it may be becauase you are not logged in as sudo.
-- `sudo` has a default timeout of `5` minutes, so if you are just testing this out you can run a command like `sudo pwd`
-and then run `macros.rb` in the next 5 minutes. The  timeout of `sudo` can be increased by running
-`sudo visudo` and changing the value of `Defaults:user_name timestamp_timeout`.
-true 
-- I know there is a way to pipe password to sudo, something like
-`(echo 'my_password'; echo '3';) | ruby macros.rb` but it wasn't working.
-Everything except the sudo part worked.  
+- ** How to program a macro to enter text for me? **
+- Use the `xdotool` in a event method like `'hello world'.chars.each { |char| \`kdotool key #{char}\` } `
+- This triggers keyboard presses for each desired character.
+- Note that this doesn't automatically delete the trigger phrase, but the BackSpace key can be triggered in the event. 
+
+- **Note on sudo**
+- This script uses sudo under the hood when calling `evtest` (which requires it)
+- The script **does not** ask for sudo, and will just hang if the current user needs to use a password to use sudo. 
+- For just testing this out one can run a command like `sudo pwd` and then run `macros.rb` in the next 5 minutes.
+- The  timeout of `sudo` can be increased by running `sudo visudo` and changing the value of `Defaults:user_name timestamp_timeout`.
+- Alternatively, the script can be run like `sudo ruby macros.rb`. This requires sudo's ruby version (1.9.3, perhaps) 
+  to have all the gems installed, and additionally, many commands like `chromium-browser` won't work when called by sudo. 
