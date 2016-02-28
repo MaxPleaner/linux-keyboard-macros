@@ -23,7 +23,7 @@ class CommandParser
     # key: the macro trigger phrase
     # val: a CommandParser instance method
     "hello world" => "hello_world",
-    "text input" => "test_text_input"
+    "text entry" => "test_text_entry"
   }
   def self.add_key(key)
     system "clear"
@@ -42,7 +42,7 @@ class CommandParser
   def hello_world
     `chromium-browser http://artoo.io`
   end
-  def test_text_input
+  def test_text_entry
     'hello world'.chars.each { |char| `xdotool key #{char.eql?(' ') ? 'space' : char}` }
   end
 end
