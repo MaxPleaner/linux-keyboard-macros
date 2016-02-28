@@ -40,6 +40,7 @@ class CommandParser
     "hello world" => "hello_world",
     "text entry" => "test_text_entry"
   }
+  @@available_methods_string = @@macro_method_mappings.keys.map { |key| "  #{key}\n"}.join + "\n"
   def self.add_key(key)
     system "clear"
     (@@current_phrase[0] = '') unless @@current_phrase.length < @@max_phrase_length
@@ -55,7 +56,7 @@ class CommandParser
   end
   def self.print_available_methods
     puts "Available_methods: ".green
-    puts @@macro_method_mappings.keys.map { |key| "  #{key}\n"}.join + "\n"
+    puts @@available_methods_string
   end
   def initialize(options={})
     puts "Initializing CommandParser".white_on_black
