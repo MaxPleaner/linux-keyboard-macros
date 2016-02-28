@@ -3,7 +3,6 @@ require 'pty'
 
 # gems
 require 'active_support/all'
-require 'byebug'
 
 # Overwrite nil.to_sym to return :nil instead of raising NoMethodError
 # This is useful with Object#try
@@ -21,7 +20,8 @@ class CommandParser
   @@max_phrase_length = 15
   @@current_phrase = ""
   @@macro_method_mappings = {
-    # "macro_name" => "Macros class method"
+    # key: the macro trigger phrase
+    # val: a CommandParser instance method
     "hello world" => "hello_world"
   }
   def self.add_key(key)
