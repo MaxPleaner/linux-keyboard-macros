@@ -41,7 +41,7 @@
     `CommandParser.trigger_deletes(CommandParser.trigger_for("my_ruby_method").length)` will delete whatever text was used to trigger the method.
   - More characters are accepted when triggering keypresses than when
     defining macro phrases. In addition to supporting `0-9, 'a'-'z' and whitespace` like macro phrases,
-    triggered keypresses can also include `'/', ':', ';', '@', and '.'`. This is so that urls and email addresses can be
+    triggered keypresses can also include `'/', ':', ';', '@', '?', '&', and '.'`. This is so that urls and email addresses can be
     supported. 
 
 ### Caveat regarding sudo

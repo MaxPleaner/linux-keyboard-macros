@@ -105,7 +105,8 @@ class CommandParser
 
 
   def self.trigger_keystrokes(string='')
-    # supports 0-9, a-z (lowercase), '/', ':', ';', '@', and '.'
+    # supports 0-9, a-z (lowercase), '/', ':', ';', '@', '&', '?', and '.'
+    # This is so that email addresses / urls can be printed.
     # Note that triggered keystrokes are not added to @@current_phrase
     # and will not trigger subsequent macro events.
     (string || '').chars.each do |char|
@@ -126,9 +127,16 @@ class CommandParser
         `xdotool key 2`
         `xdotool keyup shift`
       elsif translated_char.eql?(":")
-        # ':' requires two keypresses
         `xdotool keydown shift`
         `xdotool key semicolon`
+        `xdotool keyup shift` 
+      elsif translated_char.eql?('?')
+        `xdotool keydown shift`
+        `xdotool key slash`
+        `xdotool keyup shift` 
+      elsif translated_char.include?('&')
+        `xdotool keydown shift`
+        `xdotool key 7`
         `xdotool keyup shift` 
       else
         `xdotool key #{translated_char}`
