@@ -29,7 +29,7 @@
 ### Usage: How to add a macro:
   1. create an instance method in `CommandParser` (this is the event that is fired)
   2. map the event to a phrase by adding an entry to `@@macro_method_mappings` in `CommandParser`
-  3. Note that characters supported in macro trigger strings are: `0-9, a-z (lowercase), '/', ':', ';', '@', and '.'`
+  3. Note that characters supported in macro trigger strings are: `0-9, a-z (lowercase), and whitespace.`
     
 ### Usage: How to trigger key presses / deletes
   - **How to program a macro to enter text for me?**
@@ -38,7 +38,10 @@
     - `CommandParser.trigger_keystrokes(string)` will translate the string into `xdotool` instructions and enter the keystrokes.
     - `CommandParser.trigger_for(method_name)` looks inside `@@macro_method_mappings` to find the macro string which triggers a particular
     ruby method (event). This is used in conjunction with `trigger_deletes` to delete the trigger text. i.e.: 
-    `CommandParser.trigger_deletes(CommandParser.trigger_for("my_ruby_method").length)` will delete whatever text was used to trigger the method.   
+    `CommandParser.trigger_deletes(CommandParser.trigger_for("my_ruby_method").length)` will delete whatever text was used to trigger the method.
+  - More characters are accepted when triggering keypresses than when
+    defining macro phrases. In addition to supporting `0-9, 'a'-'z' and whitespace` like macro phrases,
+    triggered keypresses can also include `'/', ':', ';', '@', and '.'`. 
 
 ### Caveat regarding sudo
   - This script uses sudo when calling evtest (which requires it)
