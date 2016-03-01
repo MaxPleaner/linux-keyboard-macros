@@ -26,9 +26,9 @@
       additional macros. 
 
 #### Usage: How to add a macro:
-    1. create an instance method in `CommandParser` (this is the event that is fired)
-    2. map the event to a phrase by adding an entry to `@@macro_method_mappings` in `CommandParser`
-    3. Note that characters supported in macro trigger strings are: `0-9, a-z (lowercase), '/', ':', ';', '@', and '.'`
+  1. create an instance method in `CommandParser` (this is the event that is fired)
+  2. map the event to a phrase by adding an entry to `@@macro_method_mappings` in `CommandParser`
+  3. Note that characters supported in macro trigger strings are: `0-9, a-z (lowercase), '/', ':', ';', '@', and '.'`
     
 #### Usage: How to trigger key presses / deletes
   - **How to program a macro to enter text for me?**
