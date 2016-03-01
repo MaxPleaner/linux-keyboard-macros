@@ -20,7 +20,9 @@
   - A list of available macros (and the name of the Ruby method they trigger) can be seen in the terminal when the
     program is running. 
     - try typing `hello world`, which will open artoo.io in `chromium-browser`
-    - or type `text entry`, which will type 'hello world' under the cursor. 
+    - or type `text entry`, which will type 'hello world' under the cursor.
+      Note that the programmatically triggered keystrokes are **not** searched for
+      additional macros. 
 
 - How to add a macro:
     1. create an instance method in `CommandParser` (this is the event that is fired)

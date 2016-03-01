@@ -24,10 +24,6 @@ class CommandParser
     # val: a CommandParser instance method
     "hello world" => "hello_world",
     "text entry" => "test_text_entry",
-    "q laa" => "my_linked_in_url",
-    "q gaa" => "my_github_url",
-    "q waa" => "my_website_url",
-    "q eaa" => "my_email"
   }  
 
 # ---------------------------------------------------------
@@ -42,26 +38,9 @@ class CommandParser
   def test_text_entry
     self.class.trigger_deletes(self.class.trigger_for("test_text_entry").length)
     self.class.trigger_keystrokes("hello world")
-  end
-
-  def my_linked_in_url
-    self.class.trigger_deletes(self.class.trigger_for("my_linked_in_url").length)
-    self.class.trigger_keystrokes("https://linkedin.com/in/maxpleaner")
-  end
-
-  def my_github_url
-    self.class.trigger_deletes(self.class.trigger_for("my_github_url").length)
-    self.class.trigger_keystrokes("https://github.com/maxpleaner")
-  end
-
-  def my_website_url
-    self.class.trigger_deletes(self.class.trigger_for("my_website_url").length)
-    self.class.trigger_keystrokes("http://maxpleaner.com")
-  end
-
-  def my_email
-    self.class.trigger_deletes(self.class.trigger_for("my_email").length)
-    self.class.trigger_keystrokes("maxpleaner@gmail.com")
+    # these triggered keystrokes are not scanned for additional macros,
+    # and even though "hello world" is a macro phrase,
+    # the hello_world method is not called
   end
 
 # ---------------------------------------------------------
@@ -113,8 +92,11 @@ class CommandParser
     puts @@available_methods_string
   end
 
+
   def self.trigger_keystrokes(string='')
     # supports 0-9, a-z (lowercase), '/', ':', ';', '@', and '.'
+    # Note that triggered keystrokes are not added to @@current_phrase
+    # and will not trigger subsequent macro events.
     (string || '').chars.each do |char|
       translated_char = case char
       when ' '
