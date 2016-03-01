@@ -15,7 +15,7 @@
 class CommandParser
 
 # ---------------------------------------------------------
-# Macro triggers
+# Macro triggers -  add macro phrases here
 # ---------------------------------------------------------
 
 # Declare the max-length for macro names,
@@ -33,7 +33,7 @@ class CommandParser
   }  
 
 # ---------------------------------------------------------
-# CommandParser instance methods (macro events):
+# CommandParser instance methods - add macro events here
 # ---------------------------------------------------------
 
   def hello_world
