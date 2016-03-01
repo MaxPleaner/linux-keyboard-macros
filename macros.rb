@@ -55,8 +55,11 @@ class CommandParser
     "q waa" => "my_website_url",
     "q eaa" => "my_email"
   }  
+
   # Store a string detailing all available methods, so it doensn't have to be reconstructed.
-  @@available_methods_string = @@macro_method_mappings.keys.map { |key| "  #{key}\n"}.join + "\n"
+  @@available_methods_string = @@macro_method_mappings.map do |k,v|
+    "  #{k.ljust(@@max_phrase_length)} => #{v}\n"
+  end.join + "\n"
 
   # Adds a key to @@current_phrase and scans it for matching phrases.
   # Calls events for matching phrases. 
@@ -82,7 +85,8 @@ class CommandParser
   end
 
   def self.print_available_methods
-    puts "Available_methods: ".green
+    puts "#{"Available_methods: \n".green}#{"  #{"macro_name".ljust(@@max_phrase_length)} => event_method".red} "
+    puts "  " + ("-" * @@max_phrase_length * 2)
     puts @@available_methods_string
   end
 
