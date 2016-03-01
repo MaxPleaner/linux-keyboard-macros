@@ -40,7 +40,7 @@
 
 - Note on sudo
   - This script uses sudo when calling evtest (which requires it)
-  - ** The script does not ask for sudo, and will just hang if the current user needs to use a password to use sudo. **
+  - **The script does not ask for sudo, and will just hang if the current user needs to use a password to use sudo.**
   - For just testing this out one can run a command like `sudo pwd` and then run `macros_server.rb` in the next 5 minutes.
   - The  timeout of sudo can be increased by running `sudo visudo` and changing the value of `Defaults:user_name timestamp_timeout`.
   - Alternatively, the script can be run like `sudo ruby macros_server.rb`. This uses sudo's ruby version (for Ubuntu, the standard is still 1.9.3).
