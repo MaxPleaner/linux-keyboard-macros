@@ -54,7 +54,7 @@
 
 
 ### Contributing / todos
-  - There are two main features which would benefit the program.
+  - The following features would benefit the program.
     1. Being able to trigger any keystroes, not just `0-9, 'a'-'z', whitespace, '/', ':', ';', '@', '?', '&', and '.'`. This could be done by editing `CommandParser.trigger_keystrokes`.
     3. Supporting more characters in macro phrases, including single-keypress named characters like `,./';[]=-` and multi-keypress characters like `!@#$%^&*()_+?><:"{}`.
     3. Supporting variables in macros, i.e. `email maxpleaner@gmail.com` could use the email address as a varaible.
