@@ -1,29 +1,28 @@
 ### **Keyboard Macros**
 
 - Summary
-  - This uses the `evtest` linux program to get a stream of all keyboard events.
+  - This uses the evtest linux program to get a stream of all keyboard events.
   - The events are parsed using Regex and keypresses are tracked.
   - Phrases are mapped to Ruby methods which are called when the phrase is typed anywhere.
-  - Text can be programmatically added / removed under the cursor using `xdotool` helper methods.
+  - Text can be programmatically added / removed under the cursor using xdotool helper methods.
   - This program evolved from my [artoo-keyboard-macros](https://github.com/maxpleaner/artoo-keyboard-macros) project.
   - The reason for redoing it was that artoo-keyboard doesnt support global listeners [link to github issue](https://github.com/hybridgroup/artoo-keyboard/issues/6)
-  - [`pty`](http://ruby-doc.org/stdlib-2.2.3/libdoc/pty/rdoc/PTY.html) from Ruby's stdlib is used for the streaming I/O 
+  - [pty](http://ruby-doc.org/stdlib-2.2.3/libdoc/pty/rdoc/PTY.html) from Ruby's stdlib is used for the streaming I/O 
   - I tried to make this project hackable by design, and hopefully others will find it easy to extend it. The source code
     (minus dependencies) is only ~200 lines, and it's all one file. Obfuscation and labranthine OOP is avoided.
-
 -  How to run
   - install dependencies: run `bundle`.
-  - Then run the program: __`ruby macros.rb`__
+  - Then run the program: `./macros_server.rb`
   - Type anywhere (not just the terminal window) and notice how the text is captured.
   - A list of available macros (and the name of the Ruby method they trigger) can be seen in the terminal when the
     program is running. 
-    - try typing `hello world`, which will open artoo.io in `chromium-browser`,
-    or `text entry`, which will type 'hello world' under the cursor. 
+    - try typing `hello world`, which will open artoo.io in `chromium-browser`
+    - or type `text entry`, which will type 'hello world' under the cursor. 
 
 - How to add a macro:
     1. create an instance method in `CommandParser` (this is the event that is fired)
     2. map the event to a phrase by adding an entry to `@@macro_method_mappings` in `CommandParser`
-    3. Note that there is currently only support for 0-9, a-z (lowercase), and space characters in macro triggers
+    3. Note that characters supported in macro trigger strings are: `0-9, a-z (lowercase), '/', ':', ';', '@', and '.'`
     
 - How to trigger key presses / deletes
   - **How to program a macro to enter text for me?**
@@ -35,9 +34,9 @@
     `CommandParser.trigger_deletes(CommandParser.trigger_for("my_ruby_method").length)` will delete whatever text was used to trigger the method.   
 
 - Note on sudo
-  - This script uses sudo when calling `evtest` (which requires it)
-  - The script **does not** ask for sudo, and will just hang if the current user needs to use a password to use sudo. 
-  - For just testing this out one can run a command like `sudo pwd` and then run `macros.rb` in the next 5 minutes.
-  - The  timeout of `sudo` can be increased by running `sudo visudo` and changing the value of `Defaults:user_name timestamp_timeout`.
-  - Alternatively, the script can be run like `sudo ruby macros.rb`. This requires sudo's ruby version (1.9.3, perhaps) 
-    to have all the gems installed, and additionally, many commands like `chromium-browser` won't work when called by sudo. 
+  - This script uses sudo when calling evtest (which requires it)
+  - ** The script does not ask for sudo, and will just hang if the current user needs to use a password to use sudo. **
+  - For just testing this out one can run a command like `sudo pwd` and then run `macros_server.rb` in the next 5 minutes.
+  - The  timeout of sudo can be increased by running `sudo visudo` and changing the value of `Defaults:user_name timestamp_timeout`.
+  - Alternatively, the script can be run like `sudo ruby macros_server.rb`. This uses sudo's ruby version (for Ubuntu, the standard is still 1.9.3).
+    In this case, all gems need to be installed as sudo, and different paths are needed to call system programs like `chromium-browser`. 

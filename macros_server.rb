@@ -1,49 +1,23 @@
-## stdlib dependencies
-require 'pty' # pseudo-terminal
+#!/usr/bin/env ruby
 
-## ./lib dependencies
-require_relative './lib/run_with_timeout.rb'
-
-## gems
-require 'active_support/all'
-require 'colored'
-
-## Overwrite nil.to_sym to return :nil instead of raising NoMethodError
-# This is useful with Object#try
-class NilClass; def to_sym; :nil; end; end;
-
-## Test sudo access
-puts "testing sudo access with 'sudo pwd'"
-sudo_access = run_with_timeout(command="sudo pwd", timeout=0.5, tick=0.1)
-if sudo_access.blank?
-  puts "Error".red
-  puts "configure the 'sudo' command for the current user to not require a password input"
-  puts "This can be done by simply running 'sudo pwd' because 'sudo' automatically saves passwords for 5 minutes."
-  puts "If your visudo configuration doesn't remember password, this wont work"
-  exit
-end
-
-## Define the command used to get input keystrokes
-# this is passed to Macros.shell_thread(cmd) when the script is run (see end of file)
-# evtest produces a streaming log of system events
-# '3' is echoed to the process to select 'keyboard' events
-EventsStreamShellCommand = "(echo '3';) | sudo -S evtest" # The -S is necessary here to used saved sudo password.
-
+# ---------------------------------------------------------
 ## Command Parser class
 # Mapping of phrases => events
 # The Macros class sends it keys using CommandParser.add_key(key)
 # @@macro_method_mappings maps macro-strings to CommandParser instance methods
-class CommandParser
-  # Class methods call instance methods through the ParserInstance constant
-  ParserInstance = CommandParser.new
-  
-  # Add keystrokes to a current_phrase string which is scanned for matching phrases
-  @@current_phrase = ""
-  
-  # Determine the max-length for current_phrase, i.e. when to start shifting characters
-  @@max_phrase_length = 15
+# ---------------------------------------------------------
 
-  # Declarations of 'phrase' => 'event' mappings
+class CommandParser
+
+# ---------------------------------------------------------
+# Macro triggers
+# ---------------------------------------------------------
+
+# Declare the max-length for macro names,
+# i.e. when to start shifting characters
+@@max_phrase_length = 15
+
+# Declarations of 'phrase' => 'event' mappings
   # Add something here when creating a new macro
   @@macro_method_mappings = {
     # key: the macro trigger phrase
@@ -56,18 +30,67 @@ class CommandParser
     "q eaa" => "my_email"
   }  
 
-  # Store a string detailing all available methods, so it doensn't have to be reconstructed.
+# ---------------------------------------------------------
+# CommandParser instance methods (macro events):
+# ---------------------------------------------------------
+
+  def hello_world
+    self.class.trigger_deletes(self.class.trigger_for("hello_world").length)
+    `chromium-browser http://artoo.io`
+  end
+
+  def test_text_entry
+    self.class.trigger_deletes(self.class.trigger_for("test_text_entry").length)
+    self.class.trigger_keystrokes("hello world")
+  end
+
+  def my_linked_in_url
+    self.class.trigger_deletes(self.class.trigger_for("my_linked_in_url").length)
+    self.class.trigger_keystrokes("https://linkedin.com/in/maxpleaner")
+  end
+
+  def my_github_url
+    self.class.trigger_deletes(self.class.trigger_for("my_github_url").length)
+    self.class.trigger_keystrokes("https://github.com/maxpleaner")
+  end
+
+  def my_website_url
+    self.class.trigger_deletes(self.class.trigger_for("my_website_url").length)
+    self.class.trigger_keystrokes("http://maxpleaner.com")
+  end
+
+  def my_email
+    self.class.trigger_deletes(self.class.trigger_for("my_email").length)
+    self.class.trigger_keystrokes("maxpleaner@gmail.com")
+  end
+
+# ---------------------------------------------------------
+# CommandParser configuration
+# ---------------------------------------------------------
+
+  # Class methods call instance methods through the ParserInstance constant
+  ParserInstance = CommandParser.new
+  
+  # Add keystrokes to a current_phrase string
+  # This is scanned for matching phrases
+  @@current_phrase = ""
+  
+  # Store a string detailing all available methods
+  # It is printed repeatedly and doensn't need to be reconstructed.
   @@available_methods_string = @@macro_method_mappings.map do |k,v|
     "  #{k.ljust(@@max_phrase_length)} => #{v}\n"
   end.join + "\n"
 
+# ---------------------------------------------------------
+# CommandParser class methods
+# ---------------------------------------------------------
+
   # Adds a key to @@current_phrase and scans it for matching phrases.
-  # Calls events for matching phrases. 
-  # also works for multi-char keys like 'alt', although the Macros class currently filters these out.
+  # Calls events for matching phrases.
   def self.add_key(key)
     # Clear the terminal screen each time a key is typed.
     system "clear"
-    # Shift a character is the phrase is at max capacity
+    # Shift a character if the phrase is at max capacity
     (@@current_phrase[0] = '') unless @@current_phrase.length < @@max_phrase_length
     # Add the new character
     @@current_phrase << key
@@ -91,6 +114,7 @@ class CommandParser
   end
 
   def self.trigger_keystrokes(string='')
+    # supports 0-9, a-z (lowercase), '/', ':', ';', '@', and '.'
     (string || '').chars.each do |char|
       translated_char = case char
       when ' '
@@ -131,33 +155,6 @@ class CommandParser
     puts "Initializing CommandParser".white_on_black
   end
 
-# ------------
-# CommandParser instance methods (macro events):
-# ------------
-  def hello_world
-    self.class.trigger_deletes(self.class.trigger_for("hello_world").length)
-    `chromium-browser http://artoo.io`
-  end
-  def test_text_entry
-    self.class.trigger_deletes(self.class.trigger_for("test_text_entry").length)
-    self.class.trigger_keystrokes("hello world")
-  end
-  def my_linked_in_url
-    self.class.trigger_deletes(self.class.trigger_for("my_linked_in_url").length)
-    self.class.trigger_keystrokes("https://linkedin.com/in/maxpleaner")
-  end
-  def my_github_url
-    self.class.trigger_deletes(self.class.trigger_for("my_github_url").length)
-    self.class.trigger_keystrokes("https://github.com/maxpleaner")
-  end
-  def my_website_url
-    self.class.trigger_deletes(self.class.trigger_for("my_website_url").length)
-    self.class.trigger_keystrokes("http://maxpleaner.com")
-  end
-  def my_email
-    self.class.trigger_deletes(self.class.trigger_for("my_email").length)
-    self.class.trigger_keystrokes("maxpleaner@gmail.com")
-  end
 end
 
 # The Macros class continuously reads from evtest output, parses for keystrokes and 
@@ -199,6 +196,45 @@ class Macros
     CommandParser.add_key(parsed_key_info)
   end
 end
+
+# --------------
+# Environment / dependency configuration
+# --------------
+
+## stdlib dependencies
+require 'pty' # pseudo-terminal
+
+## local file dependencies
+require_relative './lib/run_with_timeout.rb'
+
+## gems
+require 'active_support/all'
+require 'colored'
+
+## Overwrite nil.to_sym to return :nil instead of raising NoMethodError
+# This is useful with Object#try
+class NilClass; def to_sym; :nil; end; end;
+
+## Test sudo access
+puts "testing sudo access with 'sudo pwd'"
+sudo_access = run_with_timeout(command="sudo pwd", timeout=0.5, tick=0.1)
+if sudo_access.blank?
+  puts "Error".red
+  puts "configure the 'sudo' command for the current user to not require a password input"
+  puts "This can be done by simply running 'sudo pwd' because 'sudo' automatically saves passwords for 5 minutes."
+  puts "If your visudo configuration doesn't remember password, this wont work"
+  exit
+end
+
+## Define the command used to get input keystrokes
+# this is passed to Macros.shell_thread(cmd) when the script is run (see end of file)
+# evtest produces a streaming log of system events
+# '3' is echoed to the process to select 'keyboard' events
+EventsStreamShellCommand = "(echo '3';) | sudo -S evtest" # The -S is necessary here to used saved sudo password.
+
+# ---------------------
+# Script execution
+# ---------------------
 
 # Run this block when the script is executed
 if __FILE__ == $0
