@@ -3,7 +3,8 @@
 - Summary
   - This uses the `evtest` linux program to get a stream of all keyboard events.
   - The events are parsed using Regex and keypresses are tracked.
-  - Events can be programmed to fire using `xdotool` when certain phrases are entered
+  - Phrases are mapped to Ruby methods which are called when the phrase is typed anywhere.
+  - Text can be programmatically added / removed under the cursor using `xdotool` helper methods.
   - This program evolved from my [artoo-keyboard-macros](https://github.com/maxpleaner/artoo-keyboard-macros) project.
   - The reason for redoing it was that artoo-keyboard doesnt support global listeners [link to github issue](https://github.com/hybridgroup/artoo-keyboard/issues/6)
   - [`pty`](http://ruby-doc.org/stdlib-2.2.3/libdoc/pty/rdoc/PTY.html) from Ruby's stdlib is used for the streaming I/O 
