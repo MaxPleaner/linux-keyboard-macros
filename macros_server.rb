@@ -29,7 +29,6 @@ class CommandParser
     # val: a CommandParser instance method
     "hello world" => "hello_world",
     "text entry" => "test_text_entry",
-    "@@cover letter" => "cover_letter"
   }  
 
 # ---------------------------------------------------------
@@ -47,11 +46,6 @@ class CommandParser
     # these triggered keystrokes are not scanned for additional macros,
     # and even though "hello world" is a macro phrase,
     # the hello_world method is not called
-  end
-
-  def cover_letter
-    self.class.trigger_deletes(self.class.trigger_for("cover_letter").length)
-    `subl /home/max/Desktop/maxp-site/public/cover-letter.txt`
   end
 
 # ---------------------------------------------------------
