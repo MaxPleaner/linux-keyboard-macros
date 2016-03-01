@@ -1,6 +1,6 @@
 ### **Keyboard Macros**
 
-- Summary
+#### Summary
   - This uses the evtest linux program to get a stream of all keyboard events.
   - The events are parsed using Regex and keypresses are tracked.
   - Phrases are mapped to Ruby methods which are called when the phrase is typed anywhere.
@@ -11,7 +11,8 @@
   - I tried to make this project hackable by design, and hopefully others will find it easy to extend it. The source code
     (minus dependencies) is only ~200 lines, and it's all one file. Obfuscation and labranthine OOP is avoided,
     and the source code is attemptedly structured to place the most-often-changed sections at the top.
--  How to run
+
+#### Installation
   - install dependencies:
     - `sudo apt-get install xdotool evtest`
     - clone the repo, `cd` in and run `bundle install`.
@@ -24,12 +25,12 @@
       Note that the programmatically triggered keystrokes are **not** searched for
       additional macros. 
 
-- How to add a macro:
+#### Usage: How to add a macro:
     1. create an instance method in `CommandParser` (this is the event that is fired)
     2. map the event to a phrase by adding an entry to `@@macro_method_mappings` in `CommandParser`
     3. Note that characters supported in macro trigger strings are: `0-9, a-z (lowercase), '/', ':', ';', '@', and '.'`
     
-- How to trigger key presses / deletes
+#### Usage: How to trigger key presses / deletes
   - **How to program a macro to enter text for me?**
   - There are three helper methods:
     - `CommandParser.trigger_deletes(n)` will trigger the 'BackSpace' key n times using `xdotool`.
@@ -38,7 +39,7 @@
     ruby method (event). This is used in conjunction with `trigger_deletes` to delete the trigger text. i.e.: 
     `CommandParser.trigger_deletes(CommandParser.trigger_for("my_ruby_method").length)` will delete whatever text was used to trigger the method.   
 
-- Note on sudo
+#### Caveat regarding sudo
   - This script uses sudo when calling evtest (which requires it)
   - **The script does not ask for sudo, and will just hang if the current user needs to use a password to use sudo.**
   - For just testing this out one can run a command like `sudo pwd` and then run `macros_server.rb` in the next 5 minutes.
