@@ -49,9 +49,12 @@ class CommandParser
     # key: the macro trigger phrase
     # val: a CommandParser instance method
     "hello world" => "hello_world",
-    "text entry" => "test_text_entry"
-  }
-  
+    "text entry" => "test_text_entry",
+    "q laa" => "my_linked_in_url",
+    "q gaa" => "my_github_url",
+    "q waa" => "my_website_url",
+    "q eaa" => "my_email"
+  }  
   # Store a string detailing all available methods, so it doensn't have to be reconstructed.
   @@available_methods_string = @@macro_method_mappings.keys.map { |key| "  #{key}\n"}.join + "\n"
 
@@ -77,10 +80,49 @@ class CommandParser
     # Print available methods each time a key is typed.
     print_available_methods
   end
+
   def self.print_available_methods
     puts "Available_methods: ".green
     puts @@available_methods_string
   end
+
+  def self.trigger_keystrokes(string='')
+    (string || '').chars.each do |char|
+      translated_char = case char
+      when ' '
+        'space'
+      when '/'
+        'slash'
+      when ';'
+        'semicolon'
+      when '.'
+        'period'
+      else
+        char 
+      end
+      if translated_char.eql?('@')
+        `xdotool keydown shift `
+        `xdotool key 2`
+        `xdotool keyup shift`
+      elsif translated_char.eql?(":")
+        # ':' requires two keypresses
+        `xdotool keydown shift`
+        `xdotool key semicolon`
+        `xdotool keyup shift` 
+      else
+        `xdotool key #{translated_char}`
+      end
+    end
+  end
+
+  def self.trigger_deletes(n=0)
+    n.times { `xdotool key BackSpace` }
+  end
+
+  def self.trigger_for(method_name='')
+    @@macro_method_mappings.key(method_name) # lookup key by val
+  end
+
   def initialize(options={})
     puts "Initializing CommandParser".white_on_black
   end
@@ -89,10 +131,28 @@ class CommandParser
 # CommandParser instance methods (macro events):
 # ------------
   def hello_world
+    self.class.trigger_deletes(self.class.trigger_for("hello_world").length)
     `chromium-browser http://artoo.io`
   end
   def test_text_entry
-    'hello world'.chars.each { |char| `xdotool key #{char.eql?(' ') ? 'space' : char}` }
+    self.class.trigger_deletes(self.class.trigger_for("test_text_entry").length)
+    self.class.trigger_keystrokes("hello world")
+  end
+  def my_linked_in_url
+    self.class.trigger_deletes(self.class.trigger_for("my_linked_in_url").length)
+    self.class.trigger_keystrokes("https://linkedin.com/in/maxpleaner")
+  end
+  def my_github_url
+    self.class.trigger_deletes(self.class.trigger_for("my_github_url").length)
+    self.class.trigger_keystrokes("https://github.com/maxpleaner")
+  end
+  def my_website_url
+    self.class.trigger_deletes(self.class.trigger_for("my_website_url").length)
+    self.class.trigger_keystrokes("http://maxpleaner.com")
+  end
+  def my_email
+    self.class.trigger_deletes(self.class.trigger_for("my_email").length)
+    self.class.trigger_keystrokes("maxpleaner@gmail.com")
   end
 end
 
@@ -128,8 +188,8 @@ class Macros
                                .downcase
     # convert the 'space' string into ' ' which is what macro trigger phrases use.
     parsed_key_info = " " if parsed_key_info == "space"
-    # only accept 1-9, a-z, @, and ' ' for now. More can be easily added, i.e. 'alt', 'tab'
-    return unless parsed_key_info.in?(['0'.upto('9').to_a, 'a'.upto('z').to_a, " ", "@"].flatten)
+    # only accept 1-9, a-z, and ' ' for now.
+    return unless parsed_key_info.in?(['0'.upto('9').to_a, 'a'.upto('z').to_a, " "].flatten)
     # If the method gets this far, the key is valid.
     # Send the key to command parser.
     CommandParser.add_key(parsed_key_info)

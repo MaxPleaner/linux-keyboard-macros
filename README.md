@@ -20,7 +20,7 @@
   - To add a macro:
     1. create an instance method in `CommandParser` (this is the event that is fired)
     2. map the event to a phrase by adding an entry to `@@macro_method_mappings` in `CommandParser`
-    3. Note that there is currently only support 0-9, a-z (lowercase), space and the '@' sign
+    3. Note that there is currently only support 0-9, a-z (lowercase), and space.
     
 -  How to run
   - How to run: __`ruby macros.rb`__
