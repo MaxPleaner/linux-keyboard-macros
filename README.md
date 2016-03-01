@@ -9,7 +9,8 @@
   - The reason for redoing it was that artoo-keyboard doesnt support global listeners [link to github issue](https://github.com/hybridgroup/artoo-keyboard/issues/6)
   - [pty](http://ruby-doc.org/stdlib-2.2.3/libdoc/pty/rdoc/PTY.html) from Ruby's stdlib is used for the streaming I/O 
   - I tried to make this project hackable by design, and hopefully others will find it easy to extend it. The source code
-    (minus dependencies) is only ~200 lines, and it's all one file. Obfuscation and labranthine OOP is avoided.
+    (minus dependencies) is only ~200 lines, and it's all one file. Obfuscation and labranthine OOP is avoided,
+    and the source code is attemptedly structured to place the most-often-changed sections at the top.
 -  How to run
   - install dependencies: run `bundle`.
   - Then run the program: `./macros_server.rb`
