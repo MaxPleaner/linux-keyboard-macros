@@ -11,7 +11,7 @@
   - I tried to make this project hackable by design, and hopefully others will find it easy to extend it. The source code
     (minus dependencies) is only ~200 lines, and it's all one file. Obfuscation and labranthine OOP is avoided,
     and the source code is attemptedly structured to place the most-often-changed sections at the top.
-
+  - I'm not packaging it up as a gem because editing the source code is required to add macros.
 ### Installation
   - install dependencies:
     - `sudo apt-get install xdotool evtest`
