@@ -30,9 +30,9 @@
   - There are three helper methods:
     - `CommandParser.trigger_deletes(n)` will trigger the 'BackSpace' key n times using `xdotool`.
     - `CommandParser.trigger_keystrokes(string)` will translate the string into `xdotool` instructions and enter the keystrokes.
-    - `CommandParser.trigger_for(method_name)` looks inside `@@macro_method_mappings` to find the macro string which a particular
-    ruby method (event). This is used in conjunction with `trigger_deletes` to easily delete the trigger text. i.e.: 
-    `CommandParser.trigger_deletes(CommandParser.trigger_for("my_ruby_method"))` will delete whatever text was used to trigger the method.   
+    - `CommandParser.trigger_for(method_name)` looks inside `@@macro_method_mappings` to find the macro string which triggers a particular
+    ruby method (event). This is used in conjunction with `trigger_deletes` to delete the trigger text. i.e.: 
+    `CommandParser.trigger_deletes(CommandParser.trigger_for("my_ruby_method").length)` will delete whatever text was used to trigger the method.   
 
 - Note on sudo
   - This script uses sudo when calling `evtest` (which requires it)
