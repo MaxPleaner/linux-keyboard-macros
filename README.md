@@ -12,7 +12,9 @@
     (minus dependencies) is only ~200 lines, and it's all one file. Obfuscation and labranthine OOP is avoided,
     and the source code is attemptedly structured to place the most-often-changed sections at the top.
 -  How to run
-  - install dependencies: run `bundle`.
+  - install dependencies:
+    - `sudo apt-get install xdotool evtest`
+    - clone the repo, `cd` in and run `bundle install`.
   - Then run the program: `./macros_server.rb`
   - Type anywhere (not just the terminal window) and notice how the text is captured.
   - A list of available macros (and the name of the Ruby method they trigger) can be seen in the terminal when the
