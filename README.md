@@ -12,21 +12,20 @@
     (minus dependencies) is only ~200 lines, and it's all one file. Obfuscation and labranthine OOP is avoided.
 
 -  How to run
-  - How to run: __`ruby macros.rb`__
-  - Then type anywhere (not just the terminal window) and notice how the text is captured.
+  - install dependencies: run `bundle`.
+  - Then run the program: __`ruby macros.rb`__
+  - Type anywhere (not just the terminal window) and notice how the text is captured.
   - A list of available macros (and the name of the Ruby method they trigger) can be seen in the terminal when the
     program is running. 
     - try typing `hello world`, which will open artoo.io in `chromium-browser`,
     or `text entry`, which will type 'hello world' under the cursor. 
 
-- Code organization
-  - All the code besides `Gemfile` is in `macros.rb`. Run `bundle` to install `activesupport`, the only dependency. 
-  - To add a macro:
+- How to add a macro:
     1. create an instance method in `CommandParser` (this is the event that is fired)
     2. map the event to a phrase by adding an entry to `@@macro_method_mappings` in `CommandParser`
     3. Note that there is currently only support for 0-9, a-z (lowercase), and space characters in macro triggers
     
-- Triggering key presses
+- How to trigger key presses / deletes
   - **How to program a macro to enter text for me?**
   - There are three helper methods:
     - `CommandParser.trigger_deletes(n)` will trigger the 'BackSpace' key n times using `xdotool`.
