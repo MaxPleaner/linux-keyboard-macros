@@ -8,8 +8,8 @@
   - This program evolved from my [artoo-keyboard-macros](https://github.com/maxpleaner/artoo-keyboard-macros) project.
   - The reason for redoing it was that artoo-keyboard doesnt support global listeners [link to github issue](https://github.com/hybridgroup/artoo-keyboard/issues/6)
   - [pty](http://ruby-doc.org/stdlib-2.2.3/libdoc/pty/rdoc/PTY.html) from Ruby's stdlib is used for the streaming I/O 
-  - I tried to make this project hackable by design, and hopefully others will find it easy to extend it. The source code
-    (minus dependencies) is only ~225 lines including comments, and it's all one file. Obfuscation and labyrinthine OOP is avoided,
+  - I tried to make this project easy to extend. The source code
+    (minus dependencies) is only ~250 lines including comments, and it's all one file. Obfuscation and labyrinthine OOP is avoided,
     and the source code is attemptedly structured to place the most-often-changed sections at the top.
   - I'm not packaging it up as a gem because editing the source code is required to add macros.
 
@@ -51,3 +51,10 @@
   - The  timeout of sudo can be increased by running `sudo visudo` and changing the value of `Defaults:user_name timestamp_timeout`.
   - Alternatively, the script can be run like `sudo ruby macros_server.rb`. This uses sudo's ruby version (for Ubuntu, the standard is still 1.9.3).
     In this case, all gems need to be installed as sudo, and different paths are needed to call system programs like `chromium-browser`. 
+
+
+### Contributing / todos
+  - There are two main features which would benefit the program.
+    1. Being able to trigger any keystroes, not just a small set. This could be done by editing `CommandParser.trigger_keystrokes`.
+    3. Supporting more characters in macro phrases, including single-keypress named characters like `,./';[]=-`, multi-keypress characters like `!@#$%^&*()_+?><:"{}`, and perhaps even `shift/alt/control/super` modifiers
+    3. Supporting variables in macros, i.e. `email maxpleaner@gmail.com` could use the email address as a varaible.
