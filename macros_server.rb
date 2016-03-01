@@ -1,6 +1,11 @@
 #!/usr/bin/env ruby
 
 # ---------------------------------------------------------
+# Note that 'require' statements are further down in the program,
+# in the "Environment / dependency configuration" section
+# ---------------------------------------------------------
+
+# ---------------------------------------------------------
 ## Command Parser class
 # Mapping of phrases => events
 # The Macros class sends it keys using CommandParser.add_key(key)
