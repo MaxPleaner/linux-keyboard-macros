@@ -1,5 +1,9 @@
 ## **Keyboard Macros**
 
+_usage gif_
+
+![usage_gif](macros.gif)
+
 ### Summary
   - This uses the evtest linux program to get a stream of all keyboard events.
   - The events are parsed using Regex and keypresses are tracked.
