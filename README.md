@@ -1,4 +1,4 @@
-[![git-brag-stats](https://labs.turbo.run/git-brag?user=maxpleaner&repo=linux-keyboard-macros&maxn=7)](https://github.com/turbo/git-brag)
+
 
 ## **Keyboard Macros**
 
