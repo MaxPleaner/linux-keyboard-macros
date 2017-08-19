@@ -12,7 +12,13 @@
 # @@macro_method_mappings maps macro-strings to CommandParser instance methods
 # ---------------------------------------------------------
 
+require 'yaml'
+require 'byebug'
+require_relative "./lib/macro_definitions.rb"
+
 class CommandParser
+
+  include MacroDefinitions
 
 # ---------------------------------------------------------
 # Macro triggers -  add macro phrases here
@@ -23,30 +29,17 @@ class CommandParser
 @@max_phrase_length = 15
 
 # Declarations of 'phrase' => 'event' mappings
-  # Add something here when creating a new macro
-  @@macro_method_mappings = {
-    # key: the macro trigger phrase
-    # val: a CommandParser instance method
-    "hello world" => "hello_world",
-    "text entry" => "test_text_entry",
-  }  
+# Add something here when creating a new macro
+@@macro_method_mappings = {
+  # key: the macro trigger phrase
+  # val: a CommandParser instance method
+}
 
-# ---------------------------------------------------------
-# CommandParser instance methods - add macro events here
-# ---------------------------------------------------------
+if File.exists? "macros.yml"
+  @@macro_method_mappings.merge! YAML.load File.read "macros.yml"
+end
 
-  def hello_world
-    self.class.trigger_deletes(self.class.trigger_for("hello_world").length)
-    `chromium-browser http://artoo.io`
-  end
 
-  def test_text_entry
-    self.class.trigger_deletes(self.class.trigger_for("test_text_entry").length)
-    self.class.trigger_keystrokes("hello world")
-    # these triggered keystrokes are not scanned for additional macros,
-    # and even though "hello world" is a macro phrase,
-    # the hello_world method is not called
-  end
 
 # ---------------------------------------------------------
 # CommandParser configuration
@@ -86,8 +79,9 @@ class CommandParser
     puts "#{"matching method".green}: #{matching_method.to_s}" if matching_method
     puts "#{"current phrase".yellow}: #{@@current_phrase}"
     # Run event for a matched phrase, if one was found
-    CommandParser::ParserInstance.try(matching_method.to_sym)
-    # Print available methods each time a key is typed.
+    # THIS IS DONE THROUGH A DELEGATOR FUNCTION IN MacroDefinitions
+    CommandParser::ParserInstance.try_to_call(matching_method)
+    # Print available methods each time a key is typed. q waa
     print_available_methods
   end
 
@@ -113,6 +107,10 @@ class CommandParser
         'semicolon'
       when '.'
         'period'
+      when "\n"
+        "Return"
+      when ","
+        "comma"
       else
         char 
       end
@@ -133,7 +131,11 @@ class CommandParser
         `xdotool key 7`
         `xdotool keyup shift` 
       else
-        `xdotool key #{translated_char}`
+        if ["-"].include? translated_char
+          `xdotool type #{translated_char}`
+        else
+          `xdotool key #{translated_char}`
+        end
       end
     end
   end
@@ -162,7 +164,8 @@ class Macros
     PTY.spawn( cmd ) do |stdout, stdin, pid|
       begin
         stdout.each { |line| Macros.process_line(line) } # send each output line to Macros.process_line
-      rescue Errno::EIO
+      rescue Errno::EIO => e
+        puts e, e.backtrace
         puts "Errno:EIO error, but this probably just means " +
               "that the process has finished giving output"
       end
@@ -196,13 +199,10 @@ end
 # Environment / dependency configuration
 # --------------
 
-## stdlib dependencies
 require 'pty' # pseudo-terminal
 
-## local file dependencies
 require_relative './lib/run_with_timeout.rb'
 
-## gems
 require 'active_support/all'
 require 'colored'
 
@@ -225,7 +225,9 @@ end
 # this is passed to Macros.shell_thread(cmd) when the script is run (see end of file)
 # evtest produces a streaming log of system events
 # '3' is echoed to the process to select 'keyboard' events
-EventsStreamShellCommand = "(echo '3';) | sudo -S evtest" # The -S is necessary here to used saved sudo password.
+# CHANGE THIS NUMBER IF NEEDED.
+# USE sudo evtest TO FIND CORRECT DEVICE NUMBER
+EventsStreamShellCommand = "(echo '6';) | sudo -S evtest" # The -S is necessary here to used saved sudo password.
 
 # ---------------------
 # Script execution
